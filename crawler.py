@@ -1,38 +1,16 @@
-from curses import KEY_SEND
-import time
-from unicodedata import name
 from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
-from bs4 import BeautifulSoup
-from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.common.action_chains import ActionChains
-driver = webdriver.Chrome('/Users/hoyeon/prefragrance-crawler/chromedriver')
-'''PLAN A : Mocking Bird
-    1. 셀레니움으로 크롬을 실행 후 구글 접속
-    2. 검색창에 직접 fragrantica 검색 후 마우스를 움직여 클릭하는 방식
-    
-    Result : FAIL'''
-#1. Google 접속 후  fragrantica 검색창에 입력 후 접속
-url = 'https://www.google.com/'
-driver.get(url)
-driver.implicitly_wait(3)
-#/html/body/div[1]/div[3]/form/div[1]/div[1]/div[1]/div/div[2]/input
-search = driver.find_element(By.XPATH, '/html/body/div[1]/div[3]/form/div[1]/div[1]/div[1]/div/div[2]/input').send_keys('fragrantica', Keys.RETURN)
-driver.implicitly_wait(1)
 
-#2. fragrantica 검색 결과 중 사이트의 링크 위로 마우스 옮겨서 클릭.
-fragrantica_link = driver.find_element(By.XPATH, '//*[@id="rso"]/div[1]/div/div/div/div/div/div/div[1]/a')
-actions = ActionChains(driver)
-actions.move_to_element(fragrantica_link)
-actions.click(on_element=None)
+from selenium.webdriver.chrome.service import Service
 
-'''PLAN B : a Whole New World
-        기존의 사용자 크롬브라우저를 컨트롤하는 방식으로 Human Verifying 우회'''
+chrome_options = webdriver.ChromeOptions()
+chrome_options.add_experimental_option("useAutomationExtension", False)
+chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
+service_obj = Service(r"/Users/hoyeon/prefragrance-crawler/chromedriver")
 
+driver = webdriver.Chrome('/Users/hoyeon/prefragrance-crawler/chromedriver', options = chrome_options, service = service_obj)
 
-
-
+url = 'https://www.fragrantica.com/designers/'
+driver.get('https://www.fragrantica.com/')
 
 
 
